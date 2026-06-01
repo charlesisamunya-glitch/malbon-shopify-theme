@@ -7,65 +7,56 @@
         <a href="{{ section.settings.show_all_url }}" class="fp-shop-all">Shop All</a>
       {% endif %}
     </div>
-    {% if section.settings.show_gender_toggle %}
-      <div class="gender-toggle">
-        <button class="active" data-gender="all">Men</button>
-        <button data-gender="women">Women</button>
-      </div>
-    {% endif %}
   </div>
 
   <div class="fp-carousel-wrap">
     <button class="fp-arrow fp-prev" aria-label="Previous">&#8249;</button>
     <div class="fp-carousel">
-      {% for block in section.blocks %}
-        {% assign product = all_products[block.settings.product] %}
-        {% if product != empty %}
-          <a
-            href="{{ product.url }}"
-            class="fp-card"
-            data-gender="{{ block.settings.gender }}"
-            {{ block.shopify_attributes }}
-          >
-            <div class="fp-card-img">
-              {% if product.featured_image %}
-                <img
-                  src="{{ product.featured_image | img_url: '600x800', crop: 'center' }}"
-                  alt="{{ product.featured_image.alt | escape | default: product.title }}"
-                  loading="lazy"
-                  width="600" height="800"
-                >
-              {% endif %}
-              <span class="fp-badge">{{ block.settings.badge | default: 'New Arrival' }}</span>
-              <button
-                class="fp-quick-add"
-                data-variant-id="{{ product.first_available_variant.id }}"
-                aria-label="Quick add {{ product.title | escape }}"
-                onclick="event.preventDefault();event.stopPropagation();"
-              >+</button>
-            </div>
-            <div class="fp-card-info">
-              <p class="fp-product-name">{{ product.title }}</p>
-              <p class="fp-product-price">{{ product.price | money }}</p>
-              {% if product.options contains 'Color' %}
-                <div class="fp-swatches">
-                  {% assign color_idx = 0 %}
-                  {% for opt in product.options_with_values %}
-                    {% if opt.name == 'Color' %}{% assign color_idx = forloop.index0 %}{% endif %}
-                  {% endfor %}
-                  {% assign seen = '' %}
-                  {% for variant in product.variants %}
-                    {% assign cv = variant.options[color_idx] | downcase | replace: ' ', '' %}
-                    {% unless seen contains cv %}
-                      {% assign seen = seen | append: cv | append: ',' %}
-                      <span class="fp-swatch" style="background:{{ cv }};" title="{{ variant.options[color_idx] }}"></span>
-                    {% endunless %}
-                  {% endfor %}
-                </div>
-              {% endif %}
-            </div>
-          </a>
-        {% endif %}
+      {% assign fp_collection = collections[section.settings.collection] %}
+      {% if fp_collection == empty %}{% assign fp_collection = collections.all %}{% endif %}
+      {% assign fp_limit = section.settings.product_limit | default: 8 %}
+      {% for product in fp_collection.products limit: fp_limit %}
+        <a href="{{ product.url }}" class="fp-card">
+          <div class="fp-card-img">
+            {% if product.featured_image %}
+              <img
+                src="{{ product.featured_image | img_url: '600x800', crop: 'center' }}"
+                alt="{{ product.featured_image.alt | escape | default: product.title }}"
+                loading="lazy"
+                width="600" height="800"
+              >
+            {% endif %}
+            <button
+              class="fp-quick-add"
+              data-variant-id="{{ product.first_available_variant.id }}"
+              aria-label="Quick add {{ product.title | escape }}"
+              onclick="event.preventDefault();event.stopPropagation();"
+            >+</button>
+          </div>
+          <div class="fp-meta">
+            <span class="fp-badge">New Arrival</span>
+          </div>
+          <div class="fp-card-info">
+            <p class="fp-product-name">{{ product.title }}</p>
+            <p class="fp-product-price">{{ product.price | money }}</p>
+            {% if product.options contains 'Color' %}
+              <div class="fp-swatches">
+                {% assign color_idx = 0 %}
+                {% for opt in product.options_with_values %}
+                  {% if opt.name == 'Color' %}{% assign color_idx = forloop.index0 %}{% endif %}
+                {% endfor %}
+                {% assign seen = '' %}
+                {% for variant in product.variants %}
+                  {% assign cv = variant.options[color_idx] | downcase | replace: ' ', '' %}
+                  {% unless seen contains cv %}
+                    {% assign seen = seen | append: cv | append: ',' %}
+                    <span class="fp-swatch" style="background:{{ cv }};" title="{{ variant.options[color_idx] }}"></span>
+                  {% endunless %}
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+        </a>
       {% endfor %}
     </div>
     <button class="fp-arrow fp-next" aria-label="Next">&#8250;</button>
@@ -160,20 +151,6 @@
 
 .fp-card:hover .fp-card-img img { transform: scale(1.04); }
 
-.fp-badge {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  background: #fff;
-  color: #111;
-  padding: 4px 8px;
-  pointer-events: none;
-}
-
 .fp-quick-add {
   position: absolute;
   bottom: 12px;
@@ -194,8 +171,20 @@
 .fp-card:hover .fp-quick-add { opacity: 1; }
 .fp-quick-add:hover { background: #111; color: #fff; border-color: #111; }
 
+.fp-meta {
+  padding: 8px 14px 0;
+}
+
+.fp-badge {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #888;
+}
+
 .fp-card-info {
-  padding: 12px 14px 18px;
+  padding: 4px 14px 18px;
 }
 
 .fp-product-name {
@@ -265,49 +254,19 @@
       prev.addEventListener('click', () => carousel.scrollBy({ left: -scrollBy(), behavior: 'smooth' }));
       next.addEventListener('click', () => carousel.scrollBy({ left: scrollBy(), behavior: 'smooth' }));
     }
-
-    // Gender toggle
-    section.querySelectorAll('.gender-toggle button').forEach(btn => {
-      btn.addEventListener('click', () => {
-        section.querySelectorAll('.gender-toggle button').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const gender = btn.dataset.gender;
-        section.querySelectorAll('.fp-card[data-gender]').forEach(card => {
-          card.style.display = (gender === 'all' || card.dataset.gender === gender) ? '' : 'none';
-        });
-      });
-    });
   });
 })();
 </script>
 
 {% schema %}
 {
-  "name": "Featured Products Carousel",
-  "max_blocks": 20,
+  "name": "Product Carousel",
   "settings": [
     { "type": "text", "id": "title", "label": "Section title", "default": "Featured Releases" },
     { "type": "url", "id": "show_all_url", "label": "\"Shop All\" link" },
-    { "type": "checkbox", "id": "show_gender_toggle", "label": "Show Men/Women toggle", "default": true }
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "range", "id": "product_limit", "label": "Products to show", "min": 4, "max": 24, "step": 1, "default": 8 }
   ],
-  "blocks": [
-    {
-      "type": "product",
-      "name": "Product",
-      "settings": [
-        { "type": "product", "id": "product", "label": "Product" },
-        { "type": "text", "id": "badge", "label": "Badge label", "default": "New Arrival" },
-        {
-          "type": "select", "id": "gender", "label": "Gender",
-          "options": [
-            { "value": "all", "label": "Men/Both" },
-            { "value": "women", "label": "Women" }
-          ],
-          "default": "all"
-        }
-      ]
-    }
-  ],
-  "presets": [{ "name": "Featured Products Carousel" }]
+  "presets": [{ "name": "Product Carousel" }]
 }
 {% endschema %}
