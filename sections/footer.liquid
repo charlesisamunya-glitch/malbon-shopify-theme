@@ -1,73 +1,277 @@
-<footer class="site-footer" role="contentinfo">
-  <div class="footer-grid">
-
-    <!-- Brand column -->
-    <div>
-      <div class="footer-logo">
-        {% if section.settings.logo %}
-          <img src="{{ section.settings.logo | img_url: '200x' }}" alt="{{ shop.name }}" width="120">
-        {% else %}
-          {{ shop.name }}
-        {% endif %}
-      </div>
-      {% if section.settings.tagline != blank %}
-        <p class="footer-tagline">{{ section.settings.tagline }}</p>
-      {% endif %}
-      <div class="footer-social">
-        {% if section.settings.instagram != blank %}
-          <a href="{{ section.settings.instagram }}" target="_blank" rel="noopener">Instagram</a>
-        {% endif %}
-        {% if section.settings.twitter != blank %}
-          <a href="{{ section.settings.twitter }}" target="_blank" rel="noopener">Twitter</a>
-        {% endif %}
-        {% if section.settings.tiktok != blank %}
-          <a href="{{ section.settings.tiktok }}" target="_blank" rel="noopener">TikTok</a>
-        {% endif %}
-      </div>
-    </div>
+<footer class="site-footer-v2" role="contentinfo">
+  <div class="footer-v2-inner">
 
     <!-- Nav columns -->
-    {% for block in section.blocks %}
-      <div {{ block.shopify_attributes }}>
-        <p class="footer-col-title">{{ block.settings.title }}</p>
-        <ul class="footer-nav-list">
-          {% assign links = block.settings.linklist %}
-          {% if linklists[links].links.size > 0 %}
-            {% for link in linklists[links].links %}
-              <li><a href="{{ link.url }}">{{ link.title }}</a></li>
-            {% endfor %}
-          {% endif %}
-        </ul>
-      </div>
-    {% endfor %}
+    <div class="footer-nav-cols">
+      {% for block in section.blocks %}
+        {% if block.type == 'nav_col' %}
+          <div class="footer-nav-col" {{ block.shopify_attributes }}>
+            <button class="footer-col-toggle" aria-expanded="false">
+              <span>{{ block.settings.title }}</span>
+              <span class="footer-col-plus">+</span>
+            </button>
+            <ul class="footer-col-links">
+              {% if linklists[block.settings.linklist].links.size > 0 %}
+                {% for link in linklists[block.settings.linklist].links %}
+                  <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+                {% endfor %}
+              {% endif %}
+            </ul>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <!-- Social icons -->
+    <div class="footer-social-row">
+      {% if section.settings.instagram != blank %}
+        <a href="{{ section.settings.instagram }}" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        </a>
+      {% endif %}
+      {% if section.settings.facebook != blank %}
+        <a href="{{ section.settings.facebook }}" target="_blank" rel="noopener" aria-label="Facebook">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+        </a>
+      {% endif %}
+      {% if section.settings.twitter != blank %}
+        <a href="{{ section.settings.twitter }}" target="_blank" rel="noopener" aria-label="X / Twitter">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+      {% endif %}
+      {% if section.settings.tiktok != blank %}
+        <a href="{{ section.settings.tiktok }}" target="_blank" rel="noopener" aria-label="TikTok">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.96a8.22 8.22 0 004.81 1.54V7.07a4.85 4.85 0 01-1.04-.38z"/></svg>
+        </a>
+      {% endif %}
+      {% if section.settings.youtube != blank %}
+        <a href="{{ section.settings.youtube }}" target="_blank" rel="noopener" aria-label="YouTube">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 001.46 6.42 29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.96A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/></svg>
+        </a>
+      {% endif %}
+    </div>
+
+    <!-- Newsletter -->
+    <div class="footer-newsletter">
+      <p class="footer-newsletter-title">Newsletter</p>
+      <p class="footer-newsletter-sub">Get exclusive drops, deals, new item updates, and more</p>
+      {% form 'customer' %}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <div class="footer-newsletter-form">
+          <input
+            type="email"
+            name="contact[email]"
+            placeholder="Email"
+            required
+            class="footer-newsletter-input"
+            aria-label="Email address"
+          >
+          <button type="submit" class="footer-newsletter-btn">Join</button>
+        </div>
+      {% endform %}
+    </div>
 
   </div>
 
-  <div class="footer-bottom">
-    <span>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</span>
-    <span>
-      {{ powered_by_link }}
-    </span>
+  <div class="footer-v2-bottom">
+    <span>&copy; {{ shop.name | upcase }} {{ 'now' | date: '%Y' }}</span>
   </div>
 </footer>
+
+<style>
+.site-footer-v2 {
+  background: #fff;
+  border-top: 1px solid rgba(0,0,0,0.08);
+  padding: 48px 24px 24px;
+}
+
+.footer-v2-inner {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 48px;
+  align-items: start;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+@media (max-width: 900px) {
+  .footer-v2-inner {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+/* Nav columns */
+.footer-nav-cols {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  gap: 0 40px;
+  align-items: start;
+}
+
+.footer-nav-col {}
+
+.footer-col-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #111;
+  padding: 0 0 12px;
+  width: 100%;
+  text-align: left;
+}
+
+.footer-col-plus {
+  font-size: 14px;
+  font-weight: 400;
+  margin-left: 2px;
+}
+
+.footer-col-links {
+  list-style: none;
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.footer-col-links.open {
+  display: flex;
+}
+
+.footer-col-links a {
+  font-size: 12px;
+  color: #555;
+  letter-spacing: 0.04em;
+  transition: color 0.2s;
+}
+
+.footer-col-links a:hover { color: #111; }
+
+/* Social */
+.footer-social-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.footer-social-row a {
+  color: #111;
+  transition: opacity 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.footer-social-row a:hover { opacity: 0.5; }
+
+/* Newsletter */
+.footer-newsletter {
+  text-align: right;
+}
+
+@media (max-width: 900px) {
+  .footer-newsletter { text-align: left; }
+  .footer-nav-cols { grid-template-columns: 1fr 1fr; }
+}
+
+.footer-newsletter-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.footer-newsletter-sub {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.footer-newsletter-form {
+  display: flex;
+  border: 1px solid rgba(0,0,0,0.2);
+}
+
+.footer-newsletter-input {
+  flex: 1;
+  border: none;
+  padding: 12px 14px;
+  font-size: 12px;
+  font-family: inherit;
+  outline: none;
+  background: #fff;
+  color: #111;
+  min-width: 0;
+}
+
+.footer-newsletter-input::placeholder { color: #aaa; }
+
+.footer-newsletter-btn {
+  padding: 12px 20px;
+  background: #111;
+  color: #fff;
+  border: none;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.footer-newsletter-btn:hover { background: #2d4a2d; }
+
+.footer-v2-bottom {
+  text-align: center;
+  margin-top: 48px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(0,0,0,0.08);
+  font-size: 11px;
+  color: #999;
+  letter-spacing: 0.1em;
+}
+</style>
+
+<script>
+document.querySelectorAll('.footer-col-toggle').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const links = btn.nextElementSibling;
+    const open = links.classList.toggle('open');
+    btn.setAttribute('aria-expanded', String(open));
+    btn.querySelector('.footer-col-plus').textContent = open ? '−' : '+';
+  });
+});
+</script>
 
 {% schema %}
 {
   "name": "Footer",
-  "max_blocks": 3,
+  "max_blocks": 4,
   "settings": [
-    { "type": "image_picker", "id": "logo", "label": "Footer logo" },
-    { "type": "textarea", "id": "tagline", "label": "Brand tagline", "default": "Golf lifestyle brand born from a love of the game and the culture around it." },
     { "type": "url", "id": "instagram", "label": "Instagram URL" },
-    { "type": "url", "id": "twitter", "label": "Twitter / X URL" },
-    { "type": "url", "id": "tiktok", "label": "TikTok URL" }
+    { "type": "url", "id": "facebook", "label": "Facebook URL" },
+    { "type": "url", "id": "twitter", "label": "X / Twitter URL" },
+    { "type": "url", "id": "tiktok", "label": "TikTok URL" },
+    { "type": "url", "id": "youtube", "label": "YouTube URL" }
   ],
   "blocks": [
     {
-      "type": "nav_column",
+      "type": "nav_col",
       "name": "Navigation Column",
       "settings": [
-        { "type": "text", "id": "title", "label": "Column heading", "default": "Shop" },
+        { "type": "text", "id": "title", "label": "Column heading", "default": "Men" },
         { "type": "link_list", "id": "linklist", "label": "Navigation menu" }
       ]
     }
@@ -76,9 +280,10 @@
     {
       "name": "Footer",
       "blocks": [
-        { "type": "nav_column" },
-        { "type": "nav_column" },
-        { "type": "nav_column" }
+        { "type": "nav_col", "settings": { "title": "Men" } },
+        { "type": "nav_col", "settings": { "title": "Women" } },
+        { "type": "nav_col", "settings": { "title": "Youth" } },
+        { "type": "nav_col", "settings": { "title": "Explore" } }
       ]
     }
   ]
