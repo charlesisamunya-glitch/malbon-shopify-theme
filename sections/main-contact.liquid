@@ -1,0 +1,185 @@
+<section class="contact-section">
+  <div class="contact-inner">
+
+    <div class="contact-left">
+      <h1 class="contact-title">Contact</h1>
+      <div class="contact-block">
+        <p class="contact-label">Email</p>
+        <a href="mailto:hello@duckhookgolfaus.com" class="contact-link">hello@duckhookgolfaus.com</a>
+      </div>
+      <div class="contact-block">
+        <p class="contact-label">Location</p>
+        <p class="contact-text">Melbourne, AU</p>
+      </div>
+      <div class="contact-block">
+        <p class="contact-label">Follow</p>
+        <div class="contact-socials">
+          <a href="https://instagram.com/duckhookgolfaus" target="_blank" rel="noopener" class="contact-link">Instagram</a>
+          <a href="https://youtube.com/@duckhookgolfaus" target="_blank" rel="noopener" class="contact-link">YouTube</a>
+        </div>
+      </div>
+      <div class="contact-block">
+        <p class="contact-label">Response Time</p>
+        <p class="contact-text">We aim to respond within 1–2 business days.</p>
+      </div>
+    </div>
+
+    <div class="contact-right">
+      {% form 'contact' %}
+        {% if form.posted_successfully? %}
+          <p class="contact-success">Thanks! We'll be in touch soon.</p>
+        {% endif %}
+        <div class="contact-field">
+          <label for="contact-name" class="contact-field-label">Name</label>
+          <input type="text" id="contact-name" name="contact[name]" required class="contact-input" placeholder="Your name">
+        </div>
+        <div class="contact-field">
+          <label for="contact-email" class="contact-field-label">Email</label>
+          <input type="email" id="contact-email" name="contact[email]" required class="contact-input" placeholder="your@email.com">
+        </div>
+        <div class="contact-field">
+          <label for="contact-subject" class="contact-field-label">Subject</label>
+          <input type="text" id="contact-subject" name="contact[body][subject]" class="contact-input" placeholder="What's this about?">
+        </div>
+        <div class="contact-field">
+          <label for="contact-message" class="contact-field-label">Message</label>
+          <textarea id="contact-message" name="contact[body]" required class="contact-textarea" rows="6" placeholder="Your message..."></textarea>
+        </div>
+        <button type="submit" class="contact-submit">Send Message</button>
+      {% endform %}
+    </div>
+
+  </div>
+</section>
+
+<style>
+.contact-section {
+  padding: 64px 24px 80px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.contact-inner {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 80px;
+  align-items: start;
+}
+
+@media (max-width: 768px) {
+  .contact-inner { grid-template-columns: 1fr; gap: 48px; }
+}
+
+.contact-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 40px;
+}
+
+.contact-block {
+  margin-bottom: 32px;
+}
+
+.contact-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #999;
+  margin-bottom: 6px;
+}
+
+.contact-text {
+  font-size: 13px;
+  color: #111;
+  line-height: 1.5;
+}
+
+.contact-link {
+  font-size: 13px;
+  color: #111;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: opacity 0.2s;
+}
+
+.contact-link:hover { opacity: 0.5; }
+
+.contact-socials {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Form */
+.contact-field {
+  margin-bottom: 20px;
+}
+
+.contact-field-label {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #555;
+  margin-bottom: 6px;
+}
+
+.contact-input,
+.contact-textarea {
+  width: 100%;
+  border: 1px solid rgba(0,0,0,0.2);
+  padding: 12px 14px;
+  font-size: 13px;
+  font-family: inherit;
+  color: #111;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.contact-input:focus,
+.contact-textarea:focus {
+  border-color: #111;
+}
+
+.contact-textarea { resize: vertical; }
+
+.contact-submit {
+  display: inline-block;
+  padding: 14px 36px;
+  background: #111;
+  color: #fff;
+  border: none;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 8px;
+}
+
+.contact-submit:hover { background: #2d4a2d; }
+
+.contact-success {
+  background: #f0ece4;
+  border: 1px solid rgba(0,0,0,0.1);
+  padding: 14px 18px;
+  font-size: 13px;
+  color: #2d4a2d;
+  margin-bottom: 24px;
+}
+</style>
+
+{% schema %}
+{
+  "name": "Contact Page",
+  "settings": [],
+  "presets": [{ "name": "Contact Page" }]
+}
+{% endschema %}
