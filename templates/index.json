@@ -1,0 +1,95 @@
+{
+  "sections": {
+    "announcement": {
+      "type": "announcement-bar",
+      "settings": {
+        "text": "FREE SHIPPING ON ORDERS OVER $150 · SHOP THE NEW COLLECTION"
+      }
+    },
+    "hero": {
+      "type": "hero-slider",
+      "blocks": {
+        "slide_1": {
+          "type": "slide",
+          "settings": {
+            "eyebrow": "New Collection",
+            "heading": "THRU THE PILLARS",
+            "subtext": "Summer looks in style. Sun-warmed tones set the mood while lacquered finishes mirror like reflections across tile.",
+            "cta1_label": "Shop Mens",
+            "cta1_url": "/collections/mens",
+            "cta2_label": "Shop Womens",
+            "cta2_url": "/collections/womens"
+          }
+        },
+        "slide_2": {
+          "type": "slide",
+          "settings": {
+            "eyebrow": "Golf Lifestyle",
+            "heading": "ON THE GREEN",
+            "subtext": "Performance meets style on the fairway.",
+            "cta1_label": "Shop Golf",
+            "cta1_url": "/collections/golf"
+          }
+        }
+      },
+      "block_order": ["slide_1", "slide_2"]
+    },
+    "featured_products": {
+      "type": "featured-products",
+      "settings": {
+        "title": "Featured Releases",
+        "show_all_url": "/collections/all",
+        "show_gender_toggle": true
+      },
+      "blocks": {}
+    },
+    "editorial": {
+      "type": "editorial-split",
+      "blocks": {
+        "panel_1": {
+          "type": "panel",
+          "settings": {
+            "label": "New Drop",
+            "heading": "SHOP MEN",
+            "cta_label": "Shop Now",
+            "link": "/collections/mens"
+          }
+        },
+        "panel_2": {
+          "type": "panel",
+          "settings": {
+            "label": "New Drop",
+            "heading": "SHOP WOMEN",
+            "cta_label": "Shop Now",
+            "link": "/collections/womens"
+          }
+        }
+      },
+      "block_order": ["panel_1", "panel_2"]
+    },
+    "marquee": {
+      "type": "marquee-bar",
+      "settings": {
+        "text": "Free Shipping Over $150 · New Arrivals · Golf Lifestyle Brand · Members Club · Free Shipping Over $150 · New Arrivals"
+      }
+    },
+    "footer": {
+      "type": "footer",
+      "settings": {
+        "tagline": "Golf lifestyle brand born from a love of the game and the culture around it."
+      },
+      "blocks": {
+        "col_1": {
+          "type": "nav_column",
+          "settings": { "title": "Shop", "linklist": "main-menu" }
+        },
+        "col_2": {
+          "type": "nav_column",
+          "settings": { "title": "Help", "linklist": "footer" }
+        }
+      },
+      "block_order": ["col_1", "col_2"]
+    }
+  },
+  "order": ["hero", "featured_products", "editorial", "marquee"]
+}

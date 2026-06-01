@@ -1,0 +1,86 @@
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-grid">
+
+    <!-- Brand column -->
+    <div>
+      <div class="footer-logo">
+        {% if section.settings.logo %}
+          <img src="{{ section.settings.logo | img_url: '200x' }}" alt="{{ shop.name }}" width="120">
+        {% else %}
+          {{ shop.name }}
+        {% endif %}
+      </div>
+      {% if section.settings.tagline != blank %}
+        <p class="footer-tagline">{{ section.settings.tagline }}</p>
+      {% endif %}
+      <div class="footer-social">
+        {% if section.settings.instagram != blank %}
+          <a href="{{ section.settings.instagram }}" target="_blank" rel="noopener">Instagram</a>
+        {% endif %}
+        {% if section.settings.twitter != blank %}
+          <a href="{{ section.settings.twitter }}" target="_blank" rel="noopener">Twitter</a>
+        {% endif %}
+        {% if section.settings.tiktok != blank %}
+          <a href="{{ section.settings.tiktok }}" target="_blank" rel="noopener">TikTok</a>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Nav columns -->
+    {% for block in section.blocks %}
+      <div {{ block.shopify_attributes }}>
+        <p class="footer-col-title">{{ block.settings.title }}</p>
+        <ul class="footer-nav-list">
+          {% assign links = block.settings.linklist %}
+          {% if linklists[links].links.size > 0 %}
+            {% for link in linklists[links].links %}
+              <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+            {% endfor %}
+          {% endif %}
+        </ul>
+      </div>
+    {% endfor %}
+
+  </div>
+
+  <div class="footer-bottom">
+    <span>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</span>
+    <span>
+      {{ powered_by_link }}
+    </span>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "max_blocks": 3,
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Footer logo" },
+    { "type": "textarea", "id": "tagline", "label": "Brand tagline", "default": "Golf lifestyle brand born from a love of the game and the culture around it." },
+    { "type": "url", "id": "instagram", "label": "Instagram URL" },
+    { "type": "url", "id": "twitter", "label": "Twitter / X URL" },
+    { "type": "url", "id": "tiktok", "label": "TikTok URL" }
+  ],
+  "blocks": [
+    {
+      "type": "nav_column",
+      "name": "Navigation Column",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Column heading", "default": "Shop" },
+        { "type": "link_list", "id": "linklist", "label": "Navigation menu" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer",
+      "blocks": [
+        { "type": "nav_column" },
+        { "type": "nav_column" },
+        { "type": "nav_column" }
+      ]
+    }
+  ]
+}
+{% endschema %}

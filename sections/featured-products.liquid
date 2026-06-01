@@ -1,0 +1,128 @@
+<section class="product-grid-section" data-product-section>
+
+  <div class="section-header">
+    <h2 class="section-title">{{ section.settings.title | default: 'Featured Releases' }}</h2>
+    <div class="section-header-right">
+      {% if section.settings.show_all_url != blank %}
+        <a href="{{ section.settings.show_all_url }}" class="btn-text">Shop All</a>
+      {% endif %}
+      {% if section.settings.show_gender_toggle %}
+        <div class="gender-toggle">
+          <button class="active" data-gender="men">Men</button>
+          <button data-gender="women">Women</button>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="product-grid">
+    {% for block in section.blocks %}
+      {% assign product = all_products[block.settings.product] %}
+      {% if product != empty %}
+        <a href="{{ product.url }}" class="product-card" data-gender="{{ block.settings.gender }}">
+          <div class="product-card-image">
+            {% if product.featured_image %}
+              <img
+                src="{{ product.featured_image | img_url: '600x800', crop: 'center' }}"
+                alt="{{ product.featured_image.alt | escape | default: product.title }}"
+                loading="lazy"
+                width="600"
+                height="800"
+              >
+            {% endif %}
+
+            {% if block.settings.badge != blank %}
+              <span class="product-badge">{{ block.settings.badge }}</span>
+            {% elsif product.tags contains 'new-arrival' %}
+              <span class="product-badge">New Arrival</span>
+            {% endif %}
+
+            <button
+              class="product-quick-add"
+              data-variant-id="{{ product.first_available_variant.id }}"
+              aria-label="Quick add {{ product.title }}"
+              onclick="event.preventDefault(); event.stopPropagation();"
+            >+</button>
+          </div>
+
+          <div class="product-card-info">
+            <p class="product-name">{{ product.title }}</p>
+            <p class="product-price">
+              {% if product.compare_at_price > product.price %}
+                <s style="color:#bbb;margin-right:6px">{{ product.compare_at_price | money }}</s>
+              {% endif %}
+              {{ product.price | money }}
+            </p>
+            {% if product.options contains 'Color' %}
+              <div class="product-swatches">
+                {% assign color_option_index = 0 %}
+                {% for option in product.options_with_values %}
+                  {% if option.name == 'Color' %}
+                    {% assign color_option_index = forloop.index0 %}
+                  {% endif %}
+                {% endfor %}
+                {% assign shown_colors = '' %}
+                {% for variant in product.variants %}
+                  {% assign color_val = variant.options[color_option_index] | downcase | replace: ' ', '-' %}
+                  {% unless shown_colors contains color_val %}
+                    {% assign shown_colors = shown_colors | append: color_val | append: ',' %}
+                    <span
+                      class="swatch"
+                      title="{{ variant.options[color_option_index] }}"
+                      style="background-color: {{ color_val }};"
+                    ></span>
+                  {% endunless %}
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+        </a>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+</section>
+
+{% schema %}
+{
+  "name": "Featured Products",
+  "max_blocks": 12,
+  "settings": [
+    { "type": "text", "id": "title", "label": "Section title", "default": "Featured Releases" },
+    { "type": "url", "id": "show_all_url", "label": "\"Shop All\" link" },
+    { "type": "checkbox", "id": "show_gender_toggle", "label": "Show Men/Women toggle", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Product" },
+        { "type": "text", "id": "badge", "label": "Badge label (e.g. New Arrival)" },
+        {
+          "type": "select",
+          "id": "gender",
+          "label": "Gender category",
+          "options": [
+            { "value": "men", "label": "Men" },
+            { "value": "women", "label": "Women" },
+            { "value": "unisex", "label": "Unisex" }
+          ],
+          "default": "men"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Products",
+      "blocks": [
+        { "type": "product" },
+        { "type": "product" },
+        { "type": "product" },
+        { "type": "product" }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,90 @@
+<div class="hero-slider" aria-label="Featured collections slideshow">
+
+  {% for block in section.blocks %}
+    <div
+      class="hero-slide{% if forloop.first %} active{% endif %}"
+      {{ block.shopify_attributes }}
+    >
+      {% if block.settings.image %}
+        <img
+          src="{{ block.settings.image | img_url: '2400x' }}"
+          alt="{{ block.settings.heading | escape }}"
+          loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+        >
+      {% else %}
+        <div style="width:100%;height:100%;background:linear-gradient(135deg,#2d4a2d,#1a1a1a)"></div>
+      {% endif %}
+
+      <div class="hero-slide-content">
+        {% if block.settings.eyebrow != blank %}
+          <p class="eyebrow">{{ block.settings.eyebrow }}</p>
+        {% endif %}
+        {% if block.settings.heading != blank %}
+          <h2>{{ block.settings.heading }}</h2>
+        {% endif %}
+        {% if block.settings.subtext != blank %}
+          <p>{{ block.settings.subtext }}</p>
+        {% endif %}
+
+        <div class="hero-cta-group">
+          {% if block.settings.cta1_label != blank %}
+            <a href="{{ block.settings.cta1_url }}" class="btn btn-white">
+              {{ block.settings.cta1_label }}
+            </a>
+          {% endif %}
+          {% if block.settings.cta2_label != blank %}
+            <a href="{{ block.settings.cta2_url }}" class="btn btn-outline-white">
+              {{ block.settings.cta2_label }}
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+
+  {% if section.blocks.size > 1 %}
+    <button class="hero-prev" aria-label="Previous slide">&#8249;</button>
+    <button class="hero-next" aria-label="Next slide">&#8250;</button>
+    <div class="hero-dots" role="tablist">
+      {% for block in section.blocks %}
+        <button
+          class="hero-dot{% if forloop.first %} active{% endif %}"
+          role="tab"
+          aria-label="Slide {{ forloop.index }}"
+        ></button>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+</div>
+
+{% schema %}
+{
+  "name": "Hero Slider",
+  "max_blocks": 6,
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Background image" },
+        { "type": "text", "id": "eyebrow", "label": "Eyebrow label", "default": "New Collection" },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "THRU THE PILLARS" },
+        { "type": "textarea", "id": "subtext", "label": "Subtext", "default": "Summer looks in style. Sun-warmed tones set the mood." },
+        { "type": "text", "id": "cta1_label", "label": "Button 1 label", "default": "Shop Mens" },
+        { "type": "url", "id": "cta1_url", "label": "Button 1 link" },
+        { "type": "text", "id": "cta2_label", "label": "Button 2 label", "default": "Shop Womens" },
+        { "type": "url", "id": "cta2_url", "label": "Button 2 link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Slider",
+      "blocks": [
+        { "type": "slide" }
+      ]
+    }
+  ]
+}
+{% endschema %}

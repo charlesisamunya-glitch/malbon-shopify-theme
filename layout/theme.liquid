@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+    {{ page_title }}{% if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif %}
+    {% if current_page != 1 %} &ndash; Page {{ current_page }}{% endif %}
+    {% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}
+  </title>
+
+  {% if page_description %}
+    <meta name="description" content="{{ page_description | escape }}">
+  {% endif %}
+
+  {{ content_for_header }}
+
+  {{ 'theme.css' | asset_url | stylesheet_tag }}
+
+  <!-- Google Fonts: Instrument Serif for script logo feel -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+
+  <style>
+    :root { --font-script: 'Instrument Serif', Georgia, serif; }
+  </style>
+</head>
+
+<body class="template-{{ template.name }}">
+
+  {% section 'announcement-bar' %}
+  {% section 'header' %}
+
+  <!-- Search Overlay -->
+  <div class="search-overlay" role="dialog" aria-label="Search">
+    <div class="search-inner">
+      <div class="search-input-wrap">
+        <form action="{{ routes.search_url }}" method="get" role="search">
+          <input
+            class="search-input"
+            type="search"
+            name="q"
+            placeholder="Search products…"
+            aria-label="Search"
+            autocomplete="off"
+          >
+        </form>
+        <button class="search-close" aria-label="Close search">&times;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cart Drawer Overlay -->
+  <div class="cart-drawer-overlay"></div>
+
+  <!-- Cart Drawer -->
+  <div class="cart-drawer" role="dialog" aria-label="Shopping cart">
+    <div class="cart-drawer-header">
+      <span class="cart-drawer-title">Your Cart</span>
+      <button class="cart-drawer-close" aria-label="Close cart">&times;</button>
+    </div>
+    <div class="cart-drawer-body">
+      {% if cart.item_count == 0 %}
+        <p class="cart-empty">Your cart is empty.</p>
+      {% else %}
+        {% for item in cart.items %}
+          <div class="cart-item" style="display:flex;gap:16px;padding:16px 0;border-bottom:1px solid rgba(0,0,0,0.07)">
+            <a href="{{ item.url }}">
+              <img src="{{ item.image | img_url: '100x' }}" alt="{{ item.title | escape }}" width="80" height="100" style="object-fit:cover;">
+            </a>
+            <div style="flex:1">
+              <p style="font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px">{{ item.product.title }}</p>
+              {% unless item.variant.title == 'Default Title' %}
+                <p style="font-size:11px;color:#888;margin-bottom:4px">{{ item.variant.title }}</p>
+              {% endunless %}
+              <p style="font-size:12px;color:#888">{{ item.final_price | money }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+    <div class="cart-drawer-footer">
+      <div class="cart-subtotal">
+        <span>Subtotal</span>
+        <span>{{ cart.total_price | money }}</span>
+      </div>
+      <a href="{{ routes.cart_url }}" class="cart-checkout-btn" style="display:block;text-align:center;text-decoration:none">
+        Checkout
+      </a>
+    </div>
+  </div>
+
+  <!-- Mobile Nav -->
+  <nav class="mobile-nav" aria-label="Mobile navigation">
+    <ul class="mobile-nav-list">
+      {% for link in linklists.main-menu.links %}
+        <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+      {% endfor %}
+    </ul>
+  </nav>
+
+  <main id="main-content">
+    {{ content_for_layout }}
+  </main>
+
+  {% section 'marquee-bar' %}
+  {% section 'footer' %}
+
+  {{ 'theme.js' | asset_url | script_tag }}
+</body>
+</html>

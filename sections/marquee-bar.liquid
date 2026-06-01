@@ -1,0 +1,29 @@
+{% if section.settings.text != blank %}
+<div class="marquee-section" aria-hidden="true">
+  <div class="marquee-track">
+    {% assign items = section.settings.text | split: '·' %}
+    {% for item in items %}
+      <span>{{ item | strip }}</span>
+    {% endfor %}
+    {% comment %}Duplicate for seamless loop{% endcomment %}
+    {% for item in items %}
+      <span>{{ item | strip }}</span>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Marquee Bar",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Ticker items (separate with ·)",
+      "default": "Free Shipping Over $150 · New Arrivals · Golf Lifestyle Brand · Members Club · Free Shipping Over $150 · New Arrivals"
+    }
+  ],
+  "presets": [{ "name": "Marquee Bar" }]
+}
+{% endschema %}
