@@ -1,0 +1,45 @@
+<div class="collection-page">
+  <div class="section-header" style="padding:40px 24px 20px;">
+    <h1 class="section-title">{{ collection.title }}</h1>
+    <p style="font-size:12px;color:#888;margin-top:4px;">{{ collection.products_count }} products</p>
+  </div>
+
+  <div class="product-grid">
+    {% for product in collection.products %}
+      <a href="{{ product.url }}" class="product-card">
+        <div class="product-card-image">
+          {% if product.featured_image %}
+            <img
+              src="{{ product.featured_image | img_url: '600x800', crop: 'center' }}"
+              alt="{{ product.featured_image.alt | escape | default: product.title }}"
+              loading="lazy" width="600" height="800"
+            >
+          {% endif %}
+          {% if product.tags contains 'new-arrival' %}
+            <span class="product-badge">New Arrival</span>
+          {% endif %}
+          <button
+            class="product-quick-add"
+            data-variant-id="{{ product.first_available_variant.id }}"
+            aria-label="Quick add {{ product.title }}"
+            onclick="event.preventDefault();event.stopPropagation();"
+          >+</button>
+        </div>
+        <div class="product-card-info">
+          <p class="product-name">{{ product.title }}</p>
+          <p class="product-price">{{ product.price | money }}</p>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+
+  {% if paginate.pages > 1 %}
+    <div style="text-align:center;padding:40px 24px;">
+      {{ paginate | default_pagination }}
+    </div>
+  {% endif %}
+</div>
+
+{% schema %}
+{ "name": "Collection", "settings": [], "presets": [{ "name": "Collection" }] }
+{% endschema %}

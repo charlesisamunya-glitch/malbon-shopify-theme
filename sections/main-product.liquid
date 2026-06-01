@@ -1,0 +1,66 @@
+<div class="product-page container" style="padding:60px 24px;display:grid;grid-template-columns:1fr 1fr;gap:48px;max-width:1200px;margin:0 auto;">
+  <div class="product-media">
+    {% for image in product.images %}
+      <img
+        src="{{ image | img_url: '800x' }}"
+        alt="{{ image.alt | escape }}"
+        loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+        style="width:100%;margin-bottom:8px;"
+      >
+    {% endfor %}
+  </div>
+
+  <div class="product-info" style="position:sticky;top:80px;align-self:start;">
+    <p style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#888;margin-bottom:8px;">
+      {{ product.type }}
+    </p>
+    <h1 style="font-size:24px;font-weight:700;letter-spacing:-.01em;text-transform:uppercase;margin-bottom:12px;">
+      {{ product.title }}
+    </h1>
+    <p style="font-size:16px;margin-bottom:24px;color:#444;">{{ product.price | money }}</p>
+
+    {% form 'product', product %}
+      {% if product.has_only_default_variant == false %}
+        {% for option in product.options_with_values %}
+          <div style="margin-bottom:16px;">
+            <p style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;">{{ option.name }}</p>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+              {% for value in option.values %}
+                <label style="border:1px solid #111;padding:8px 16px;font-size:12px;letter-spacing:.06em;cursor:pointer;">
+                  <input type="radio" name="options[{{ option.name | handleize }}]" value="{{ value }}" style="display:none;">
+                  {{ value }}
+                </label>
+              {% endfor %}
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      <select name="id" style="display:none;">
+        {% for variant in product.variants %}
+          <option value="{{ variant.id }}"{% unless variant.available %} disabled{% endunless %}>
+            {{ variant.title }}
+          </option>
+        {% endfor %}
+      </select>
+
+      <button
+        type="submit"
+        name="add"
+        class="btn btn-black"
+        style="width:100%;padding:18px;font-size:12px;font-weight:700;letter-spacing:.15em;margin-top:24px;"
+        {% unless product.available %}disabled{% endunless %}
+      >
+        {% if product.available %}Add to Cart{% else %}Sold Out{% endif %}
+      </button>
+    {% endform %}
+
+    <div style="margin-top:32px;font-size:13px;line-height:1.8;color:#444;">
+      {{ product.description }}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{ "name": "Product", "settings": [], "presets": [{ "name": "Product" }] }
+{% endschema %}

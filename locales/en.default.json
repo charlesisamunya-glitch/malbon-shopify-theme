@@ -1,0 +1,40 @@
+{
+  "general": {
+    "search": { "placeholder": "Search products…", "submit": "Search" },
+    "pagination": { "previous": "Previous", "next": "Next" },
+    "404": { "title": "Page not found", "subtext": "The page you requested does not exist.", "link": "Continue shopping" }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Add to cart",
+      "sold_out": "Sold out",
+      "unavailable": "Unavailable",
+      "quantity": "Quantity",
+      "regular_price": "Regular price",
+      "sale_price": "Sale price"
+    },
+    "general": { "view_all": "View all" }
+  },
+  "cart": {
+    "general": {
+      "title": "Your Cart",
+      "empty": "Your cart is empty",
+      "checkout": "Checkout",
+      "subtotal": "Subtotal",
+      "item_count": { "one": "{{ count }} item", "other": "{{ count }} items" }
+    }
+  },
+  "collections": {
+    "general": { "view_all": "View all", "items_with_count": { "one": "{{ count }} product", "other": "{{ count }} products" } }
+  },
+  "sections": {
+    "header": { "menu": "Menu" },
+    "footer": { "copyright": "© {{ shop_name }}" }
+  },
+  "accessibility": {
+    "skip_to_content": "Skip to content",
+    "close": "Close",
+    "open_menu": "Open menu",
+    "search": "Search"
+  }
+}
